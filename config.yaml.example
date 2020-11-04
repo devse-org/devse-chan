@@ -1,0 +1,10 @@
+discord:
+  token: secret
+  channel: fff
+
+irc:
+  nick: devse-chan
+  username: devse
+  host: irc.freenode.net
+  port: 6667
+  channel: #devse
