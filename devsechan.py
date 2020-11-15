@@ -18,10 +18,11 @@ async def on_message(message):
         return
     if message.channel.id != config['discord']['channel'].get():
         return
-    formated = f"<{message.author}>: {message.content}"
+    raw_msg = f"{message.content}"
     if len(message.attachments) >= 1:
-        formated += message.attachments[0].url
-    ircbot.send("PRIVMSG", target="#devse", message=formated)
+        raw_msg += message.attachments[0].url
+    for msg in raw_msg.split("\n"):
+        ircbot.send("PRIVMSG", target="#devse", message=f"<{message.author}>: {msg}")
 
 
 @ircbot.on('CLIENT_CONNECT')
