@@ -7,4 +7,5 @@ irc:
   username: devse
   host: irc.freenode.net
   port: 6667
-  channel: #devse
+  ssl: false
+  channel: '#devse'
