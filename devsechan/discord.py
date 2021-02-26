@@ -12,9 +12,10 @@ def Discord(parent, config):
             return
         if message.channel.id != config['channel'].get():
             return
-
-        msg_list = message.content.split('\n')
-
+        content = message.content
+        for user in message.mentions:
+            content = content.replace(f"<@!{user.id}>", f"@{user.name}#{user.discriminator}")
+        msg_list = content.split('\n')
         attachments_count = len(message.attachments)
         for i in range(attachments_count):
             msg_list.append(message.attachments[i].url)
