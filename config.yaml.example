@@ -5,7 +5,7 @@ discord:
 irc:
   nick: devse-chan
   username: devse
-  host: irc.freenode.net
+  host: irc.libera.chat
   port: 6667
   ssl: false
   channel: '#devse'

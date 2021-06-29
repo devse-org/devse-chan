@@ -6,4 +6,4 @@ Bot used on DevSE's Discord and IRC channel
 
 - Site: https://devse.wiki
 - Discord: https://discord.com/invite/3XjkM6q
-- Freenode: [#devse](https://webchat.freenode.net/?#devse)
+- Libera.chat: [#devse](https://web.libera.chat/?#devse)
