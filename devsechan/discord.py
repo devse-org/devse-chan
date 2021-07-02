@@ -4,7 +4,7 @@ import discord
 
 def Discord(parent, config):
 
-    bot = discord.Client()
+    bot = discord.Client(intents=discord.Intents().all())
 
     @bot.event
     async def on_message(message):
