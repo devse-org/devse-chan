@@ -3,8 +3,9 @@ import discord
 
 
 def Discord(parent, config):
-
-    bot = discord.Client()
+    intents = discord.Intents.default()
+    intents.members = True
+    bot = discord.Client(intents=intents)
 
     @bot.event
     async def on_message(message):
