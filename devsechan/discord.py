@@ -14,7 +14,8 @@ def Discord(parent, config):
             return
         content = message.content
         for user in message.mentions:
-            content = content.replace(f"<@!{user.id}>", f"@{user.name}#{user.discriminator}")
+            substitute = f"@{user.name}#{user.discriminator}"
+            content = content.replace(f"<@!{user.id}>", substitute).replace(f"<@{user.id}>", substitute)
         for channel in message.channel_mentions:
             content = content.replace(f"<#{channel.id}>", f"#{channel.name}")
         msg_list = content.split('\n')
