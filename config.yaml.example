@@ -1,6 +1,7 @@
 discord:
   token: secret
-  channel: fff
+  guild: fff
+  channel: 'irc'
 
 irc:
   nick: devse-chan
