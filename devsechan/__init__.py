@@ -42,8 +42,9 @@ class DevSEChan:
     def to_irc(self, author, msg_list):
         target = self.config['irc']['channel'].get()
         for msg in msg_list:
-            self.irc.send('PRIVMSG', target=target,
-                          message=f"<\x036{author}\x0F> {msg}")
+            if len(msg) > 0:
+                self.irc.send('PRIVMSG', target=target,
+                    message=f"<\x036{author}\x0F> {msg}")
 
     def run(self):
         token = self.config['discord']['token'].get()
