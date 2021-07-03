@@ -14,7 +14,10 @@ class DevSEChan:
         self.discord = Discord(self, self.config['discord'])
 
     def get_member_ping_to_id(self, nickname, guild):
-        return '<@' + str(guild.get_member_named(nickname).id) + '>'
+        member = guild.get_member_named(nickname)
+        if member is not None:
+            return f"<@{member.id}>"
+        return None
 
     def convert_irc_mentions_to_discord(self, message, guild):
         mentions_regex = r"(?<=@)[a-zA-Z0-9]*"
@@ -22,8 +25,9 @@ class DevSEChan:
 
         for mention in mentions_match:
             nickname = mention.group()
-            message = message.replace('@' + nickname,
-                                      self.get_member_ping_to_id(nickname, guild))
+            member_id = self.get_member_ping_to_id(nickname, guild)
+            if member_id is not None:
+                message = message.replace('@' + nickname, member_id)
 
         return message
 
