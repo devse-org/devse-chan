@@ -1,4 +1,5 @@
 import asyncio
+import time
 import confuse
 import re
 from devsechan.irc import IRC
@@ -43,8 +44,10 @@ class DevSEChan:
         target = self.config['irc']['channel'].get()
         for msg in msg_list:
             if len(msg) > 0:
+                time.sleep(1)
                 self.irc.send('PRIVMSG', target=target,
                     message=f"<\x036{author}\x0F> {msg}")
+                time.sleep(2)
 
     def run(self):
         token = self.config['discord']['token'].get()
