@@ -1,6 +1,6 @@
 import bottom
 import asyncio
-
+import platform
 
 def IRC(parent, config):
 
@@ -32,6 +32,10 @@ def IRC(parent, config):
     async def irc_message(nick, target, message, **kwargs):
         if nick == config['nick'].get():
             return
+        if target == config['nick'].get():
+            if message == '\001VERSION\001':
+                gnuify = lambda x: 'GNU/Linux' if x == 'Linux' else x
+                irc.send('NOTICE', target=nick, message=f"\001VERSION devse-chan on {gnuify(platform.system())}\001")
         if target != config['channel'].get():
             return
         await parent.to_discord(nick, message)
