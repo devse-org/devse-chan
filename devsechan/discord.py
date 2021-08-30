@@ -11,6 +11,8 @@ def Discord(parent, config):
     async def on_message(message):
         if message.author == bot.user:
             return
+        if message.webhook_id:
+            return
         if message.channel.id != config['channel'].get():
             return
         content = message.content

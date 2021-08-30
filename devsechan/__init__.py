@@ -4,7 +4,8 @@ import confuse
 import re
 from devsechan.irc import IRC
 from devsechan.discord import Discord
-
+from discord import Webhook, AsyncWebhookAdapter
+import aiohttp
 
 class DevSEChan:
 
@@ -33,12 +34,19 @@ class DevSEChan:
         return message
 
     async def to_discord(self, nick, message):
+        webhook_url = self.config['discord']['webhook'].get()
         channel_id = self.config['discord']['channel'].get()
         channel = self.discord.get_channel(channel_id)
         guild = channel.guild
-        converted_message = self.convert_irc_mentions_to_discord(
-            message, guild)
-        await channel.send(f"**<{nick}>** {converted_message}")
+        converted_message = self.convert_irc_mentions_to_discord(message, guild)
+        avatar = None
+        member = guild.get_member_named(nick)
+        if member is not None:
+            avatar = member.avatar_url
+
+        async with aiohttp.ClientSession() as session:
+            webhook = Webhook.from_url(webhook_url, adapter=AsyncWebhookAdapter(session))
+            await webhook.send(converted_message, username=nick, avatar_url=avatar)
 
     def to_irc(self, author, msg_list):
         target = self.config['irc']['channel'].get()
