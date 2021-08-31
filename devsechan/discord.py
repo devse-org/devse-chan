@@ -1,8 +1,7 @@
-
 import discord
 from discord import Webhook, AsyncWebhookAdapter
 import aiohttp
-
+import re
 
 class Discord:
 
