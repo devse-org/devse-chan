@@ -1,6 +1,7 @@
 discord:
   token: secret
   channel: chan_id
+  channel-log: chan_id
   webhook: http://secret/
 
 irc:
