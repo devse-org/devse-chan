@@ -11,6 +11,7 @@ class Discord:
         intents = discord.Intents.default()
         intents.members = True
         self.bot = discord.Client(intents=intents)
+        self.log_channel = None
         self.guild = None
 
         @self.bot.event
@@ -24,9 +25,30 @@ class Discord:
             parent.to_irc(message.author, self.__format_message_for_irc(message))
 
         @self.bot.event
+        async def on_message_delete(message):
+            if message.channel == self.log_channel:
+                return
+
+            files = []
+
+            if len(message.attachments) > 0:
+                for attachment in message.attachments:
+                    files.append(f"<File    > {attachment.url}")
+
+            files.append("```")
+
+            data = "\n".join(["```markdown", "# Message Deleted",
+                f"[{message.created_at}](#{message.channel})",
+                f"<Message > {message.clean_content.replace('```', '')}"]
+                + files)
+
+            await self.log_channel.send(data)
+
+        @self.bot.event
         async def on_ready():
             channel = self.bot.get_channel(self.config['channel'].get())
             self.guild = channel.guild
+            self.log_channel = self.bot.get_channel(self.config['channel-log'].get())
 
     async def send(self, nick, message):
         avatar_url = None
