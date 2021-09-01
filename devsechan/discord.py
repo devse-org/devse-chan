@@ -24,26 +24,44 @@ class Discord:
                 return
             parent.to_irc(message.author, self.__format_message_for_irc(message))
 
+        
+        def __dump_message_data(message):
+            data = []
+
+            if len(message.clean_content) > 0:
+                data.append(f"<Message > {message.clean_content.replace('```', '´´´')}")
+
+            for attachment in message.attachments:
+                data.append(f"<File    > {attachment.url}")
+        
+            return data
+
+        @self.bot.event 
+        async def on_message_edit(before, after):
+            data = ["```markdown", "# Message Edited",
+                f"[{before.created_at}](#{before.channel})",
+                f"< {before.author} >", "<Before  >"]
+
+            data += __dump_message_data(before)
+            data += ["", "<After   >"]
+            data += __dump_message_data(after)
+            data.append("```")
+
+            await self.log_channel.send("\n".join(data))
+
         @self.bot.event
         async def on_message_delete(message):
             if message.channel == self.log_channel:
                 return
 
-            files = []
-
-            if len(message.attachments) > 0:
-                for attachment in message.attachments:
-                    files.append(f"<File    > {attachment.url}")
-
-            files.append("```")
-
-            data = "\n".join(["```markdown", "# Message Deleted",
+            data = ["```markdown", "# Message Deleted",
                 f"[{message.created_at}](#{message.channel})",
-                f"< {message.author} >",
-                f"<Message > {message.clean_content.replace('```', '')}"]
-                + files)
+                f"< {message.author} >"]
 
-            await self.log_channel.send(data)
+            data += __dump_message_data(message)
+            data.append("```")
+
+            await self.log_channel.send("\n".join(data))
 
         @self.bot.event
         async def on_ready():
