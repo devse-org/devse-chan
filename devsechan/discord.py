@@ -24,7 +24,7 @@ class Discord:
                 return
             parent.to_irc(message.author, self.__format_message_for_irc(message))
 
-        
+
         def __dump_message_data(message):
             data = []
 
@@ -33,11 +33,14 @@ class Discord:
 
             for attachment in message.attachments:
                 data.append(f"<File    > {attachment.url}")
-        
+
             return data
 
-        @self.bot.event 
+        @self.bot.event
         async def on_message_edit(before, after):
+            # ignore webhook
+            if before.webhook_id:
+                return
             data = ["```markdown", "# Message Edited",
                 f"[{before.created_at}](#{before.channel})",
                 f"< {before.author} >", "<Before  >"]
