@@ -24,6 +24,31 @@ class Discord:
                 return
             parent.to_irc(message.author, self.__format_message_for_irc(message))
 
+        
+        def __dump_message_data(message):
+            data = []
+
+            if len(message.clean_content) > 0:
+                data.append(f"<Message > {message.clean_content.replace('```', '´´´')}")
+
+            for attachment in message.attachments:
+                data.append(f"<File    > {attachment.url}")
+        
+            return data
+
+        @self.bot.event 
+        async def on_message_edit(before, after):
+            data = ["```markdown", "# Message Edited",
+                f"[{before.created_at}](#{before.channel})",
+                f"< {before.author} >", "<Before  >"]
+
+            data += __dump_message_data(before)
+            data += ["", "<After   >"]
+            data += __dump_message_data(after)
+            data.append("```")
+
+            await self.log_channel.send("\n".join(data))
+
         @self.bot.event
         async def on_message_delete(message):
             if message.channel == self.log_channel:
@@ -33,12 +58,7 @@ class Discord:
                 f"[{message.created_at}](#{message.channel})",
                 f"< {message.author} >"]
 
-            if len(message.clean_content) > 0:
-                data.append(f"<Message > {message.clean_content.replace('```', '´´´')}")
-
-            for attachment in message.attachments:
-                data.append(f"<File    > {attachment.url}")
-
+            data += __dump_message_data(message)
             data.append("```")
 
             await self.log_channel.send("\n".join(data))
