@@ -2,8 +2,12 @@ discord:
   token: secret
   channel: chan_id
   channel-log: chan_id
+  channel-welcome: chan_id
   webhook: http://secret/
-
+  messages:
+    welcome: "`$date_$time`: Bonjour **$name** !"
+    goodbye: "`$date_$time`: **$name** nous a quitté :^("
+  
 irc:
   nick: devse-chan
   username: devse

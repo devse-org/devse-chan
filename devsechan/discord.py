@@ -1,7 +1,11 @@
+from time import strftime
 import discord
 from discord import Webhook, AsyncWebhookAdapter
+from string import Template
+from datetime import datetime
 import aiohttp
 import re
+
 
 class Discord:
 
@@ -12,6 +16,7 @@ class Discord:
         intents.members = True
         self.bot = discord.Client(intents=intents)
         self.log_channel = None
+        self.welcome_channel = None
         self.guild = None
 
         @self.bot.event
@@ -22,14 +27,15 @@ class Discord:
                 return
             if message.channel.id != self.config['channel'].get():
                 return
-            parent.to_irc(message.author, self.__format_message_for_irc(message))
-
+            parent.to_irc(message.author,
+                          self.__format_message_for_irc(message))
 
         def __dump_message_data(message):
             data = []
 
             if len(message.clean_content) > 0:
-                data.append(f"<Message > {message.clean_content.replace('```', '´´´')}")
+                data.append(
+                    f"<Message > {message.clean_content.replace('```', '´´´')}")
 
             for attachment in message.attachments:
                 data.append(f"<File    > {attachment.url}")
@@ -42,8 +48,8 @@ class Discord:
             if before.webhook_id:
                 return
             data = ["```markdown", "# Message Edited",
-                f"[{before.created_at}](#{before.channel})",
-                f"< {before.author} >", "<Before  >"]
+                    f"[{before.created_at}](#{before.channel})",
+                    f"< {before.author} >", "<Before  >"]
 
             data += __dump_message_data(before)
             data += ["", "<After   >"]
@@ -58,8 +64,8 @@ class Discord:
                 return
 
             data = ["```markdown", "# Message Deleted",
-                f"[{message.created_at}](#{message.channel})",
-                f"< {message.author} >"]
+                    f"[{message.created_at}](#{message.channel})",
+                    f"< {message.author} >"]
 
             data += __dump_message_data(message)
             data.append("```")
@@ -67,10 +73,31 @@ class Discord:
             await self.log_channel.send("\n".join(data))
 
         @self.bot.event
+        async def on_member_join(member):
+            msg = Template(self.config['messages']['welcome'].get())
+            now = datetime.utcnow()
+            m = msg.substitute(name=member.display_name,
+                               time=now.strftime("%H:%M:%S UTC"),
+                               date=now.strftime("%Y-%m-%d"))
+            await self.welcome_channel.send(m)
+
+        @self.bot.event
+        async def on_member_remove(member):
+            msg = Template(self.config['messages']['goodbye'].get())
+            now = datetime.utcnow()
+            m = msg.substitute(name=member.display_name,
+                               time=now.strftime("%H:%M:%S UTC"),
+                               date=now.strftime("%Y-%m-%d"))
+            await self.welcome_channel.send(m)
+
+        @ self.bot.event
         async def on_ready():
             channel = self.bot.get_channel(self.config['channel'].get())
             self.guild = channel.guild
-            self.log_channel = self.bot.get_channel(self.config['channel-log'].get())
+            self.welcome_channel = self.bot.get_channel(
+                self.config['channel-welcome'].get())
+            self.log_channel = self.bot.get_channel(
+                self.config['channel-log'].get())
 
     async def send(self, nick, message):
         avatar_url = None
