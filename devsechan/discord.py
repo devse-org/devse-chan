@@ -29,21 +29,19 @@ class Discord:
             if message.channel == self.log_channel:
                 return
 
-            files = []
-
-            if len(message.attachments) > 0:
-                for attachment in message.attachments:
-                    files.append(f"<File    > {attachment.url}")
-
-            files.append("```")
-
-            data = "\n".join(["```markdown", "# Message Deleted",
+            data = ["```markdown", "# Message Deleted",
                 f"[{message.created_at}](#{message.channel})",
-                f"< {message.author} >",
-                f"<Message > {message.clean_content.replace('```', '´´´')}"]
-                + files)
+                f"< {message.author} >"]
 
-            await self.log_channel.send(data)
+            if len(message.clean_content) > 0:
+                data.append(f"<Message > {message.clean_content.replace('```', '´´´')}")
+
+            for attachment in message.attachments:
+                data.append(f"<File    > {attachment.url}")
+
+            data.append("```")
+
+            await self.log_channel.send("\n".join(data))
 
         @self.bot.event
         async def on_ready():
