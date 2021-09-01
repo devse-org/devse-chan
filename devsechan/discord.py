@@ -40,7 +40,7 @@ class Discord:
             data = "\n".join(["```markdown", "# Message Deleted",
                 f"[{message.created_at}](#{message.channel})",
                 f"< {message.author} >",
-                f"<Message > {message.clean_content.replace('```', '')}"]
+                f"<Message > {message.clean_content.replace('```', '´´´')}"]
                 + files)
 
             await self.log_channel.send(data)
