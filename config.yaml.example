@@ -5,8 +5,8 @@ discord:
   channel-welcome: chan_id
   webhook: http://secret/
   messages:
-    welcome: "`$date_$time`: Bonjour **$name** !"
-    goodbye: "`$date_$time`: **$name** nous a quitté :^("
+    welcome: "`${date}_$time`: Bonjour **$name** !"
+    goodbye: "`${date}_$time`: **$name** nous a quitté :^("
   
 irc:
   nick: devse-chan
