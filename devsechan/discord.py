@@ -3,7 +3,7 @@ import discord
 from discord import Webhook, AsyncWebhookAdapter
 from string import Template
 from datetime import datetime
-from devsechan import avatar
+from devsechan.utils import user
 import aiohttp
 import re
 
@@ -106,7 +106,7 @@ class Discord:
         if member is not None:
             avatar_url = member.avatar_url
         if avatar_url is None:
-            avatar_url = avatar.gen_avatar_from_nick(nick)
+            avatar_url = user.avatar_url_from_nick(nick)
         message = self.__format_message_for_discord(message)
         async with aiohttp.ClientSession() as session:
             webhook = Webhook.from_url(
