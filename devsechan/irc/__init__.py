@@ -28,7 +28,7 @@ class IRC:
             except BaseException:
                 pass
             self.irc.send('JOIN', channel=config['channel'].get())
-        
+
         @self.irc.on("CLIENT_DISCONNECT")
         async def reconnect(**kwarg):
             self.irc.connect()
