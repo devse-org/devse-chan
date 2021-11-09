@@ -1,16 +1,15 @@
-from re import M
 import bottom
 import asyncio
-import platform
 
 from devsechan.utils import version
-
+from devsechan.irc.channel import ChannelGuard
 
 class IRC:
 
     def __init__(self, parent, config):
         self.config = config
         self.irc = bottom.Client(host=config['host'].get(), port=config['port'].get(), ssl=config['ssl'].get())
+        self.guard = ChannelGuard()
 
         @self.irc.on('CLIENT_CONNECT')
         async def connect(**kwargs):
@@ -29,8 +28,12 @@ class IRC:
             except BaseException:
                 pass
             self.irc.send('JOIN', channel=config['channel'].get())
+        
+        @self.irc.on("CLIENT_DISCONNECT")
+        async def reconnect(**kwarg):
+            self.irc.connect()
 
-        @self.irc.on('privmsg')
+        @self.irc.on('PRIVMSG')
         async def irc_message(nick, target, message, **kwargs):
             if nick == config['nick'].get():
                 return
@@ -45,8 +48,12 @@ class IRC:
                         'NOTICE',
                         target=nick,
                         message='\001SOURCE https://github.com/d0p1s4m4/devse-chan\001')
+                return
             elif target != config['channel'].get():
                 return
+            if self.guard.is_spammer(nick, message):
+                return
+
             await parent.to_discord(nick, message)
 
         @self.irc.on('PING')

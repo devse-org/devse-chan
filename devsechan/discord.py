@@ -1,6 +1,5 @@
-from time import strftime
-import discord
-from discord import Webhook, AsyncWebhookAdapter
+import nextcord
+from nextcord import Webhook
 from string import Template
 from datetime import datetime
 from devsechan.utils import user
@@ -13,9 +12,9 @@ class Discord:
     def __init__(self, parent, config):
         self.config = config
 
-        intents = discord.Intents.default()
+        intents = nextcord.Intents.default()
         intents.members = True
-        self.bot = discord.Client(intents=intents)
+        self.bot = nextcord.Client(intents=intents)
         self.log_channel = None
         self.welcome_channel = None
         self.guild = None
@@ -104,14 +103,14 @@ class Discord:
         avatar_url = None
         member = self.__member_from_nick(nick)
         if member is not None:
-            avatar_url = member.avatar_url
+            avatar_url = member.avatar.url
         if avatar_url is None:
             avatar_url = user.avatar_url_from_nick(nick)
         message = self.__format_message_for_discord(message)
         async with aiohttp.ClientSession() as session:
             webhook = Webhook.from_url(
                 self.config['webhook'].get(),
-                adapter=AsyncWebhookAdapter(session))
+                session=session)
             await webhook.send(message, username=nick, avatar_url=avatar_url)
 
     def __member_from_nick(self, nick):
@@ -131,7 +130,7 @@ class Discord:
             nick = mention.group()
             member = self.__member_from_nick(nick)
             if member is not None:
-                message = message.replace('@' + nickname, f"<@{member.id}>")
+                message = message.replace('@' + nick, f"<@{member.id}>")
         return message
 
     def __format_message_for_irc(self, message):
