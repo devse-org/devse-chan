@@ -3,6 +3,8 @@ import bottom
 import asyncio
 import platform
 
+from devsechan.utils import version
+
 
 class IRC:
 
@@ -34,11 +36,10 @@ class IRC:
                 return
             if target == config['nick'].get():
                 if message == '\001VERSION\001':
-                    def gnuify(x): return 'GNU/Linux' if x == 'Linux' else x
                     self.irc.send(
                         'NOTICE',
                         target=nick,
-                        message=f"\001VERSION devse-chan on {gnuify(platform.system())}\001")
+                        message=f"\001VERSION {version.version()}\001")
                 elif message == '\001SOURCE\001':
                     self.irc.send(
                         'NOTICE',
