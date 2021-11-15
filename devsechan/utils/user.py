@@ -17,3 +17,11 @@ def avatar_url_from_nick(nick: str) -> str:
     avatar_url = "https://eu.ui-avatars.com/api/?background={:02x}{:02x}{:02x}&name={}".format(
         red, blue, green, nick)
     return avatar_url
+
+
+def irc_colorize_nick(nick: str) -> str:
+    colors = [2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13]
+    hashcode = hash(nick)
+
+    selected_color = colors[hashcode % len(colors)]
+    return f"\x03{selected_color}{nick}\x0F"

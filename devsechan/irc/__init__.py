@@ -1,7 +1,7 @@
 import bottom
 import asyncio
 
-from devsechan.utils import version
+from devsechan.utils import version, user
 from devsechan.irc.channel import ChannelGuard
 
 class IRC:
@@ -61,7 +61,8 @@ class IRC:
             self.irc.send('PONG', message=message)
 
     def send(self, nick, message):
-        self.irc.send('PRIVMSG', target=self.config['channel'].get(), message=f"<\x036{nick}\x0F> {message}")
+        colored_nick = user.irc_colorize_nick(nick)
+        self.irc.send('PRIVMSG', target=self.config['channel'].get(), message=f"<{colored_nick}> {message}")
 
     async def start(self):
         return await self.irc.connect()
