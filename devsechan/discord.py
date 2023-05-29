@@ -1,5 +1,5 @@
-import nextcord
-from nextcord import Webhook
+import discord
+from discord import Webhook
 from string import Template
 from datetime import datetime
 from devsechan.utils import user
@@ -12,9 +12,9 @@ class Discord:
     def __init__(self, parent, config):
         self.config = config
 
-        intents = nextcord.Intents.default()
+        intents = discord.Intents.default()
         intents.members = True
-        self.bot = nextcord.Client(intents=intents)
+        self.bot = discord.Client(intents=intents)
         self.log_channel = None
         self.welcome_channel = None
         self.guild = None
