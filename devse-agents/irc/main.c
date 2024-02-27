@@ -51,9 +51,11 @@ main(int argc, char **argv)
 {
 	int c;
 
+#ifdef ENABLE_NLS
 	setlocale(LC_ALL, "");
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
+#endif /* ENABLE_NLS */
 
 	while ((c = getopt(argc, argv, "Vh")) != -1)
 	{

@@ -42,9 +42,11 @@ main(int argc, char **argv)
 	char clientid[24];
 	struct mosquitto *mosq;
 
+#ifdef ENABLE_NLS
 	setlocale(LC_ALL, "");
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
+#endif /* ENABLE_NLS */
 
 	mosquitto_lib_init();
 

@@ -21,6 +21,13 @@ AC_PROG_CPP
 AC_PROG_RANLIB
 AM_PROG_AR
 AM_PROG_CC_C_O
+AC_PATH_PROG([CARGO], [cargo], [notfound])
+AS_IF([test "$CARGO" = "notfound"], [AC_MSG_ERROR([cargo is required])])
+AC_PATH_PROG([RUSTC], [rustc], [notfound])
+AS_IF([test "$RUSTC" = "notfound"], [AC_MSG_ERROR([rustc is required])])
+
+CARGO_TARGET=release
+AC_SUBST(CARGO_TARGET)
 
 AC_CHECK_INCLUDES_DEFAULT
 AC_C_CONST
@@ -30,6 +37,8 @@ PKG_CHECK_MODULES(CONFIG, libconfig)
 
 AC_CONFIG_FILES([Makefile
 				devse-core/Makefile
-				devse-irc-agent/Makefile
+				devse-agents/Makefile
+				devse-agents/irc/Makefile
+				devse-agents/discord/Makefile
 				po/Makefile.in])
 AC_OUTPUT
