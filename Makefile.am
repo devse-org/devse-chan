@@ -1,4 +1,4 @@
-SUBDIRS = devse-core devse-agents
+SUBDIRS = devse-core devse-agents po
 
 ACLOCAL_AMFLAGS = -I m4
 

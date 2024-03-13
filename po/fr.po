@@ -1,0 +1,23 @@
+# French translations for devsechan package.
+# Copyright (C) 2024 d0p1
+# This file is distributed under the same license as the devsechan package.
+# <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: devsechan 2.0\n"
+"Report-Msgid-Bugs-To: https://github.com/devse-org/devse-chan/issues\n"
+"POT-Creation-Date: 2024-03-13 10:57+0100\n"
+"PO-Revision-Date: 2024-03-13 10:56+0100\n"
+"Last-Translator: <EMAIL@ADDRESS>\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: devse-core/main.c:46 devse-agents/irc/main.c:42
+#, c-format
+msgid "Try '%s -h' for more information.\n"
+msgstr ""

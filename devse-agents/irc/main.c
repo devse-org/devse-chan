@@ -5,6 +5,9 @@
 
 #include <mosquitto.h>
 #include "devse_config.h"
+#include "gettext.h"
+
+#define _(x) gettext(x)
 
 static char *prg_name = "devse-irc-agent";
 static char *opt_irc_nick = "devse-chan";
@@ -23,7 +26,7 @@ void
 version(void)
 {
 	printf(PACKAGE_NAME " v" PACKAGE_VERSION "\n");
-	printf("Copyright (C) 2023 d0p1\n");
+	printf("Copyright (C) 2024 d0p1\n");
 	printf("License BSD-3-Clause: <https://directory.fsf.org/wiki/License:BSD-3-Clause>\n");
 	printf("This is free software: you are free to change and redistribute it.\n");
 	printf("There is NO WARRANTY, to the extent permitted by law.\n");
@@ -36,11 +39,11 @@ usage(int retval)
 {
 	if (retval != EXIT_SUCCESS)
 	{
-		fprintf(stderr, "Try '%s -h' for more information.\n", prg_name);
+		fprintf(stderr, _("Try '%s -h' for more information.\n"), prg_name);
 	}
 	else
 	{
-		printf("Usage: %s [OPTIONS...]\n", prg_name);
+		printf("Usage: %s [-Vh]\n", prg_name);
 	}
 
 	exit(retval);
