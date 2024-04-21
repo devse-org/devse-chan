@@ -3,9 +3,8 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <locale.h>
-
-#include <mosquitto.h>
 #include "devse_config.h"
+#include "logger.h"
 #include "gettext.h"
 
 #define _(x) gettext(x)
@@ -57,8 +56,6 @@ int
 main(int argc, char **argv)
 {
 	int c;
-	char clientid[24];
-	struct mosquitto *mosq;
 
 #ifdef ENABLE_NLS
 	setlocale(LC_ALL, "");
@@ -66,7 +63,7 @@ main(int argc, char **argv)
 	textdomain(PACKAGE);
 #endif /* ENABLE_NLS */
 
-	mosquitto_lib_init();
+	logger_init_default();
 
 	while ((c = getopt(argc, argv, "Vhc:")) != -1)
 	{
@@ -89,26 +86,6 @@ main(int argc, char **argv)
 		}
 	}
 
-	memset(clientid, 0, 24);
-	snprintf(clientid, 23, "%s-%d", prg_name, getpid());
-	mosq = mosquitto_new(clientid, 1, NULL);
-	if (mosq == NULL)
-	{
-		fatal("Out of memory.");
-	}
-
-	c = mosquitto_connect(mosq, "localhost", 1883, 120);
-	if (c != MOSQ_ERR_SUCCESS)
-	{
-		mosquitto_destroy(mosq);
-		fatal(mosquitto_strerror(c));
-	}
-
-	mosquitto_loop_forever(mosq, -1, 1);
-
-	mosquitto_destroy(mosq);
-
-	mosquitto_lib_cleanup();
-
+	
 	return (EXIT_SUCCESS);
 }

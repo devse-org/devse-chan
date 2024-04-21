@@ -36,10 +36,10 @@ dnl Check getopt_long
 AC_CHECK_HEADERS([getopt.h])
 AC_CHECK_FUNCS([getopt_long])
 
-PKG_CHECK_MODULES(MOSQUITTO, libmosquitto)
 PKG_CHECK_MODULES(CONFIG, libconfig)
 
 AC_CONFIG_FILES([Makefile
+				lib/Makefile
 				devse-core/Makefile
 				devse-agents/Makefile
 				devse-agents/irc/Makefile

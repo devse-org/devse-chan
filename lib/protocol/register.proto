@@ -1,0 +1,21 @@
+package devsechan;
+
+syntax = "proto2";
+
+message Register {
+	required string agent = 1;
+	required string version = 1;
+	required string program = 1;
+}
+
+message User {
+
+}
+
+message Sub {
+	required string key = 1;
+}
+
+message Pub {
+	
+}
