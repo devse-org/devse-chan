@@ -15,6 +15,7 @@ class Discord:
 
         intents = discord.Intents.default()
         intents.members = True
+        intents.message_content = True
         self.bot = discord.Client(intents=intents)
         self.log_channel = None
         self.welcome_channel = None
